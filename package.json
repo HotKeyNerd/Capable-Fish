@@ -1,0 +1,1 @@
+{\n  "name": "capable-fish",\n  "version": "1.0.0",\n  "description": "Convert photos to SVG using Node.js and OpenCV",\n  "main": "photo_to_svg.js",\n  "scripts": {\n    "start": "node photo_to_svg.js"\n  },\n  "dependencies": {\n    "opencv4nodejs": "^6.0.0",\n    "@svgdotjs/svg.js": "^3.2.0"\n  }\n}
