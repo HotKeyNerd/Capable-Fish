@@ -1,9 +1,211 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Welcome to Capable Fish</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo to SVG Converter - Capable Fish</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+        }
+        
+        .upload-area {
+            border: 3px dashed #3498db;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .upload-area:hover {
+            background-color: #ecf0f1;
+            border-color: #2980b9;
+        }
+        
+        .upload-area.dragover {
+            background-color: #d5dbdb;
+            border-color: #2980b9;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        label {
+            font-weight: 600;
+            color: #34495e;
+        }
+        
+        input[type="range"] {
+            width: 200px;
+        }
+        
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        
+        button:hover:not(:disabled) {
+            background-color: #2980b9;
+        }
+        
+        button:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+        
+        .preview-area {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .preview-container {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .preview-container h3 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        
+        canvas, svg {
+            max-width: 100%;
+            border: 1px solid #ecf0f1;
+            border-radius: 4px;
+        }
+        
+        .download-btn {
+            background-color: #27ae60;
+            margin-top: 15px;
+        }
+        
+        .download-btn:hover:not(:disabled) {
+            background-color: #229954;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            color: #3498db;
+            margin: 20px 0;
+        }
+        
+        .error {
+            color: #e74c3c;
+            background-color: #fadbd8;
+            padding: 10px;
+            border-radius: 6px;
+            margin: 10px 0;
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .preview-area {
+                grid-template-columns: 1fr;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome to Capable Fish!</h1>
-    <p>This is a placeholder for your GitHub Pages site.</p>
+    <div class="container">
+        <h1>🐟 Photo to SVG Converter</h1>
+        <p class="subtitle">Convert your photos to scalable vector graphics</p>
+        
+        <div class="upload-area" id="uploadArea">
+            <p>📁 Click here or drag and drop an image file</p>
+            <p style="font-size: 14px; color: #7f8c8d;">Supports JPG, PNG, GIF, BMP</p>
+            <input type="file" id="fileInput" class="file-input" accept="image/*">
+        </div>
+        
+        <div class="error" id="errorMessage"></div>
+        
+        <div class="controls">
+            <div class="control-group">
+                <label for="threshold">Threshold: <span id="thresholdValue">128</span></label>
+                <input type="range" id="threshold" min="1" max="255" value="128">
+            </div>
+            
+            <div class="control-group">
+                <label for="simplification">Simplification: <span id="simplificationValue">2</span></label>
+                <input type="range" id="simplification" min="0" max="10" value="2">
+            </div>
+            
+            <button id="convertBtn" disabled>Convert to SVG</button>
+        </div>
+        
+        <div class="loading" id="loadingMessage">
+            <p>🔄 Converting image...</p>
+        </div>
+        
+        <div class="preview-area" id="previewArea" style="display: none;">
+            <div class="preview-container">
+                <h3>Original Image</h3>
+                <canvas id="originalCanvas"></canvas>
+            </div>
+            
+            <div class="preview-container">
+                <h3>SVG Result</h3>
+                <div id="svgContainer"></div>
+                <button id="downloadBtn" class="download-btn">Download SVG</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="photo-to-svg.js"></script>
 </body>
 </html>
